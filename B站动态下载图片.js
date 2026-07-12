@@ -7,7 +7,7 @@
 // @license      GPL-3.0
 // @match        https://t.bilibili.com/*
 // @match        https://www.bilibili.com/opus/*
-// @match        https://space.bilibili.com/*/dynamic*
+// @match        https://space.bilibili.com/*
 // @icon         https://www.bilibili.com/favicon.ico
 // @run-at       document-idle
 // ==/UserScript==
