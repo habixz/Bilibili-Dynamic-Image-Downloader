@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B站动态下载图片
 // @namespace    habixz.Bilibili.DynamicImageDownload
-// @version      1.0.0
+// @version      1.1.0
 // @description  为 B 站动态大图预览添加“下载原图”按钮，并使用浏览器原生下载流程触发下载，同时给出页面内提示。
 // @author       habixz
 // @license      GPL-3.0
@@ -818,7 +818,8 @@
     /**
      * 生成更友好的下载文件名。
      * 命名格式优先为：
-     * `B站动态_作者名_动态123456_第03张.jpg`
+     * `B站动态_作者名_2026-08-10_动态123456_第03张.jpg`
+     * 日期取下载当天（本地时区），方便后续按日期追溯归档。
      * @param {string} imageUrl 图片地址。
      * @param {{authorName: string, dynamicId: string, imageIndex: number}} context 命名上下文。
      * @returns {string}
@@ -831,6 +832,8 @@
             parts.push(context.authorName);
         }
 
+        parts.push(formatDateStamp(new Date()));
+
         if (context.dynamicId) {
             parts.push('动态' + context.dynamicId);
         }
@@ -840,6 +843,20 @@
         }
 
         return ensureFileNameExtension(sanitizeFileName(parts.join('_')), extension);
+    }
+
+    /**
+     * 把日期格式化为 `YYYY-MM-DD` 形式的字符串。
+     * 这里手动拼接，避免 toLocaleDateString 在不同系统上的输出差异。
+     * @param {Date} date 需要格式化的日期。
+     * @returns {string}
+     */
+    function formatDateStamp(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return year + '-' + month + '-' + day;
     }
 
     /**
